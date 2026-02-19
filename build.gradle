@@ -3,10 +3,14 @@ plugins {
 }
 
 group = 'top.outlands.diceroller4j'
-version = '1.0-SNAPSHOT'
+version = '1.0.0'
 
 repositories {
     mavenCentral()
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
 }
 
 dependencies {
