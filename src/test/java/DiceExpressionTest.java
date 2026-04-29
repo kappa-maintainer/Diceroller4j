@@ -118,7 +118,7 @@ public class DiceExpressionTest {
         void testExplodeFullFormat() throws Exception {
             IExpression expr = DiceExpressionCompiler.compile("d6 explode always on 5 or more");
             assertNotNull(expr.toString());
-            assertTrue(expr.toString().equals("d6e5"));
+            assertEquals("d6e5", expr.toString());
         }
         
         @Test
@@ -126,7 +126,7 @@ public class DiceExpressionTest {
         void testRerollFullFormat() throws Exception {
             IExpression expr = DiceExpressionCompiler.compile("d6 reroll always on 1 or less");
             assertNotNull(expr.toString());
-            assertTrue(expr.toString().equals("d6r1"));
+            assertEquals("d6r1", expr.toString());
         }
 
         @Test
@@ -782,7 +782,7 @@ public class DiceExpressionTest {
             
             List<RollResult> results = DiceResults.getLastBatchResults();
             assertEquals(1, results.size(), "单次d6投掷应产生1条记录");
-            RollResult rr = results.get(0);
+            RollResult rr = results.getFirst();
             assertEquals(6, rr.side(), "骰子面数应为6");
             assertTrue(rr.result() >= 1 && rr.result() <= 6, "结果应在1-6之间");
         }
@@ -852,7 +852,7 @@ public class DiceExpressionTest {
             IExpression expr = DiceExpressionCompiler.compile("d6");
             expr.roll();
             
-            RollResult rr = DiceResults.getLastBatchResults().get(0);
+            RollResult rr = DiceResults.getLastBatchResults().getFirst();
             String str = rr.toString();
             assertTrue(str.matches("d6=\\d+"), "RollResult toString应为 d6=X 格式，实际为: " + str);
         }
@@ -866,8 +866,8 @@ public class DiceExpressionTest {
             
             List<RollResult> results = DiceResults.getLastBatchResults();
             assertEquals(1, results.size());
-            assertEquals(100, results.get(0).side(), "百分骰应存储为面数100");
-            assertTrue(results.get(0).result() >= 1 && results.get(0).result() <= 100);
+            assertEquals(100, results.getFirst().side(), "百分骰应存储为面数100");
+            assertTrue(results.getFirst().result() >= 1 && results.getFirst().result() <= 100);
         }
 
         @Test
@@ -906,9 +906,7 @@ public class DiceExpressionTest {
             expr.roll();
             
             List<RollResult> results = DiceResults.getLastBatchResults();
-            assertThrows(UnsupportedOperationException.class, () -> {
-                results.add(new RollResult(6, 1));
-            }, "返回的列表应不可修改");
+            assertThrows(UnsupportedOperationException.class, () -> results.add(new RollResult(6, 1)), "返回的列表应不可修改");
         }
     }
 
