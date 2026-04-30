@@ -1,9 +1,14 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
-group = 'top.outlands.diceroller4j'
+group = 'top.outlands'
 version = '1.0.0'
+
+base {
+    archivesName = 'diceroller4j'
+}
 
 repositories {
     mavenCentral()
@@ -24,4 +29,29 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        maven {
+            name = 'outlands'
+            url = 'https://maven.outlands.top/releases'
+            credentials {
+                username = project.findProperty('alias') as String
+                password = project.findProperty('token') as String
+            }
+            //credentials(PasswordCredentials)
+            authentication {
+                basic(BasicAuthentication)
+            }
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            groupId = group
+            artifactId = "diceroller4j"
+            version = rootProject.version
+            from components.java
+        }
+    }
 }
